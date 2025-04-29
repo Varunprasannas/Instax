@@ -1,25 +1,29 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
-  base: './', // Relative paths for production
+  base: './', // Ensures relative paths for production
   plugins: [react()],
   optimizeDeps: {
-    exclude: ['lucide-react'], // Skip bundling lucide-react
+    exclude: ['lucide-react'], // Avoid bundling lucide-react in dev
   },
   resolve: {
     alias: {
-      '@': '/src', // Path alias for imports
+      '@': path.resolve(__dirname, './src'), // Unified alias resolution
     },
   },
   build: {
-    outDir: 'dist', // Production build output directory
+    outDir: 'dist',
+    sourcemap: true,
+    emptyOutDir: true,
+    assetsInlineLimit: 0, // Ensures assets are not inlined (helps with MIME issues)
   },
   server: {
-    port: 3000, // Custom dev server port (default: 5173)
-    open: true, // Auto-open browser on startup
+    port: 3000,
+    open: true,
   },
   esbuild: {
-    jsxInject: `import React from 'react'`, // Auto-injects React in JSX files
+    jsxInject: `import React from 'react'`, // Auto-import React in JSX
   },
 });
